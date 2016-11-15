@@ -10,7 +10,9 @@ module.exports = {
   },
   resolve: {
     alias: {
-      objects: path.join(__dirname, 'src/objects')
+      objects: path.join(__dirname, 'src/objects'),
+      scenes: path.join(__dirname, 'src/scenes'),
+      lib: path.join(__dirname, 'src/lib')
     }
   },
   module: {

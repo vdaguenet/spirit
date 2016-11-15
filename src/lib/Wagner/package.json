@@ -1,0 +1,40 @@
+{
+  "name": "@superguigui/wagner",
+  "version": "0.1.3",
+  "description": "Fork of spite/Wagner in commonjs for browserify and glslify.",
+  "main": "index.js",
+  "scripts": {
+    "start": "budo example/index.js:example/bundle.js --live -t glslify | garnish",
+    "build": "browserify example/index.js -t glslify | uglifyjs -nm > example/bundle.js",
+    "test": "browserify test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/superguigui/Wagner.git"
+  },
+  "homepage": "http://github.com/superguigui/Wagner",
+  "bugs": {
+    "url": "https://github.com/superguigui/Wagner/issues"
+  },
+  "author": "Guillaume Gouessan <guillaume.gouessan@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "glslify": "^2.1.2",
+    "raf": "^2.0.4"
+  },
+  "devDependencies": {
+    "browserify": "^10.1.0",
+    "budo": "^4.0.0",
+    "dat-gui": "^0.5.0",
+    "domready": "^1.0.8",
+    "garnish": "^2.1.3",
+    "raf": "^2.0.4",
+    "uglifyjs": "^2.4.10",
+    "watchify": "^3.2.1"
+  },
+  "browserify": {
+    "transform": [
+      "glslify"
+    ]
+  }
+}
