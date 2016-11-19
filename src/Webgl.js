@@ -3,13 +3,15 @@ import WAGNER from 'lib/Wagner';
 import FXAAPass from 'lib/Wagner/src/passes/fxaa/FXAAPass';
 import VignettePass from 'lib/Wagner/src/passes/vignette/VignettePass';
 import OrbitControls from 'lib/OrbitControls';
-import Elk from 'objects/Elk.js';
-import Ground from 'objects/Ground.js';
+import Elk from 'objects/Elk';
+import Ground from 'objects/Ground';
+import Sky from 'objects/Sky';
 
 export default class Webgl {
   constructor(width, height) {
     this.params = {
-      usePostprocessing: true
+      usePostprocessing: false,
+      worldSize: 800
     };
 
     this.lights = {
@@ -22,12 +24,14 @@ export default class Webgl {
     this.scene = new Scene();
 
     this.camera = new PerspectiveCamera(50, width / height, 1, 1000);
-    this.camera.position.y = 5;
+    this.camera.position.y = 20;
     this.camera.position.z = 100;
+    this.camera.lookAt(0, 20, 0);
 
     this.initLights();
 
     this.renderer = new WebGLRenderer();
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(width, height);
     this.renderer.setClearColor(0x262626);
 
@@ -37,14 +41,20 @@ export default class Webgl {
     this.initPostprocessing();
 
     this.elk = new Elk();
-    this.elk.position.set(0, -14, 0);
+    this.elk.position.set(0, 0, 0);
     this.scene.add(this.elk);
 
-    this.ground = new Ground();
-    this.ground.position.set(0, -15, 0);
+    this.ground = new Ground(this.params.worldSize);
+    this.ground.position.set(0, 0, 0);
     this.scene.add(this.ground);
 
     this.clock = new Clock();
+  }
+
+  onLoaderComplete() {
+    this.sky = new Sky(0.8 * this.params.worldSize);
+    this.sky.position.set(0, 0.3 * this.params.worldSize, 0);
+    this.scene.add(this.sky);
   }
 
   initLights() {

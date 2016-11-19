@@ -31,6 +31,8 @@
   },
   "dependencies": {
     "@superguigui/wagner": "^0.1.3",
+    "brindille-preloader": "^2.0.0",
+    "component-emitter": "^1.2.1",
     "glslify": "^6.0.1",
     "guigui": "0.0.8",
     "lodash.bindall": "^4.4.0",
