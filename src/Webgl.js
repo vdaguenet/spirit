@@ -1,4 +1,4 @@
-import { Scene, PerspectiveCamera, WebGLRenderer, Clock, HemisphereLight } from 'three';
+import { Scene, PerspectiveCamera, WebGLRenderer, Clock, HemisphereLight, DirectionalLight, DirectionalLightHelper } from 'three';
 import WAGNER from 'lib/Wagner';
 import FXAAPass from 'lib/Wagner/src/passes/fxaa/FXAAPass';
 import VignettePass from 'lib/Wagner/src/passes/vignette/VignettePass';
@@ -6,6 +6,8 @@ import OrbitControls from 'lib/OrbitControls';
 import Elk from 'objects/Elk';
 import Ground from 'objects/Ground';
 import Sky from 'objects/Sky';
+
+const DEBUG = true;
 
 export default class Webgl {
   constructor(width, height) {
@@ -16,21 +18,25 @@ export default class Webgl {
 
     this.lights = {
       hemisphere: {
-        color: '#BBFFFC',
-        groundColor: '#080820'
+        color: '#262A45', // '#BBFFFC',
+        groundColor: '#E4D19C' // '#080820'
+      },
+      directional: {
+        color: '#A193FA', // #FAAA93
+        intencity: 0.5
       }
     };
 
     this.scene = new Scene();
 
     this.camera = new PerspectiveCamera(50, width / height, 1, 1000);
-    this.camera.position.y = 20;
+    this.camera.position.y = 30;
     this.camera.position.z = 100;
     this.camera.lookAt(0, 20, 0);
 
     this.initLights();
 
-    this.renderer = new WebGLRenderer();
+    this.renderer = new WebGLRenderer({ antialising: true });
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(width, height);
     this.renderer.setClearColor(0x262626);
@@ -44,10 +50,6 @@ export default class Webgl {
     this.elk.position.set(0, 0, 0);
     this.scene.add(this.elk);
 
-    this.ground = new Ground(this.params.worldSize);
-    this.ground.position.set(0, 0, 0);
-    this.scene.add(this.ground);
-
     this.clock = new Clock();
   }
 
@@ -55,12 +57,26 @@ export default class Webgl {
     this.sky = new Sky(0.8 * this.params.worldSize);
     this.sky.position.set(0, 0.3 * this.params.worldSize, 0);
     this.scene.add(this.sky);
+
+    this.ground = new Ground(this.params.worldSize);
+    this.ground.position.set(0, 0, 0);
+    this.scene.add(this.ground);
   }
 
   initLights() {
     this.hemiLight = new HemisphereLight(this.lights.hemisphere.color, this.lights.hemisphere.groundColor, 0.6);
     this.hemiLight.position.set(0, 500, 0);
+    this.hemiLight.castShadow = true;
     this.scene.add(this.hemiLight);
+
+    this.directionalLigth = new DirectionalLight(this.lights.directional.color, this.lights.directional.intencity);
+    this.directionalLigth.castShadow = true;
+    this.directionalLigth.position.set(0, 120, -335);
+    this.scene.add(this.directionalLigth);
+    if (DEBUG) {
+      this.dirLightHelper = new DirectionalLightHelper(this.directionalLigth, 10);
+      this.scene.add(this.dirLightHelper);
+    }
   }
 
   initPostprocessing() {
@@ -85,6 +101,10 @@ export default class Webgl {
     let delta = this.clock.getDelta();
     this.controls.update();
     this.elk.update(delta);
+
+    if (DEBUG) {
+      this.dirLightHelper.update();
+    }
   }
 
   render() {

@@ -19,7 +19,7 @@ export default class Elk extends Object3D {
       shading: FlatShading
     });
 
-    this.light = new PointLight(this.emissive, 2, 35, 2);
+    this.light = new PointLight(this.color, 1, 100, 2);
     this.light.position.set(0, 12, 0);
     this.light.castShadow = true;
     this.add(this.light);
@@ -35,6 +35,7 @@ export default class Elk extends Object3D {
     this.mesh = new Mesh(geometry, this.material);
     this.mesh.scale.set(0.2, 0.2, 0.2);
     this.mesh.castShadow = true;
+    this.mesh.rotation.y = Math.PI;
     this.add(this.mesh);
     this.animator = new AnimationMixer(this.mesh);
     this.clip = this.animator.clipAction(geometry.animations[0]).setDuration(1);
@@ -61,6 +62,5 @@ export default class Elk extends Object3D {
     if (!this.isReady) { return; }
 
     this.animator.update(dt);
-    this.rotation.y += 0.001;
   }
 }

@@ -22,6 +22,14 @@ function initGUILights(webgl) {
   guiHemiLight.addColorPicker(webgl.lights.hemisphere, 'groundColor').on('update', (value) => {
     webgl.hemiLight.groundColor.set(value);
   });
+  const guiDirLight = gui.addFolder('DirectionalLight');
+  guiDirLight.add(webgl.directionalLigth.position, 'x', { min: -500, max: 500 });
+  guiDirLight.add(webgl.directionalLigth.position, 'y', { min: -500, max: 500 });
+  guiDirLight.add(webgl.directionalLigth.position, 'z', { min: -500, max: 500 });
+  guiDirLight.add(webgl.directionalLigth, 'intensity', { min: 0, max: 1, step: 0.01 });
+  guiDirLight.addColorPicker(webgl.lights.directional, 'color').on('update', (value) => {
+    webgl.directionalLigth.color.set(value);
+  });
 }
 
 function initGUIElk(webgl) {
