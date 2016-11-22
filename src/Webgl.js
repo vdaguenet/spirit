@@ -11,6 +11,9 @@ const DEBUG = true;
 
 export default class Webgl {
   constructor(width, height) {
+    this.isReady = false;
+    this.isRunning = false;
+
     this.params = {
       usePostprocessing: false,
       worldSize: 800
@@ -61,6 +64,8 @@ export default class Webgl {
     this.ground = new Ground(this.params.worldSize);
     this.ground.position.set(0, 0, 0);
     this.scene.add(this.ground);
+
+    this.isReady = true;
   }
 
   initLights() {
@@ -97,9 +102,24 @@ export default class Webgl {
     this.renderer.setSize(width, height);
   }
 
+  startRun() {
+    this.elk.startAnimation(false);
+    this.isRunning = true;
+  }
+
+  stopRun() {
+    this.elk.stopAnimation(true);
+    this.isRunning = false;
+  }
+
   update() {
+    if (!this.isReady) { return; }
+
     let delta = this.clock.getDelta();
     this.controls.update();
+    if (this.isRunning) {
+      this.ground.update();
+    }
     this.elk.update(delta);
 
     if (DEBUG) {

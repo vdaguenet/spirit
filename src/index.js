@@ -2,6 +2,7 @@ import './style/index.styl';
 
 import loop from 'raf-loop';
 import preloader from 'lib/Preloader';
+import Mediator from 'lib/Mediator';
 import Webgl from './Webgl';
 import { initGUI } from './gui';
 
@@ -15,14 +16,16 @@ document.body.appendChild(webgl.renderer.domElement);
 const engine = loop(animate);
 bindEvents();
 
+preloader.load([
+  { id: 'heightmap', src: '../assets/textures/ground-16.png', priority: 0, origin: 'anonymous' }
+]);
 preloader.loadTextures([
   { id: 'sky_back', src: '../assets/skybox/skybox_back.jpg' },
   { id: 'sky_bottom', src: '../assets/skybox/skybox_bottom.jpg' },
   { id: 'sky_front', src: '../assets/skybox/skybox_front.jpg' },
   { id: 'sky_left', src: '../assets/skybox/skybox_left.jpg' },
   { id: 'sky_right', src: '../assets/skybox/skybox_right.jpg' },
-  { id: 'sky_top', src: '../assets/skybox/skybox_top.jpg' },
-  { id: 'ground_displacement', src: '../assets/textures/ground-16.png' }
+  { id: 'sky_top', src: '../assets/skybox/skybox_top.jpg' }
 ]);
 
 function resizeHandler() {
@@ -36,6 +39,7 @@ function animate() {
 
 function start() {
   engine.start();
+  Mediator.emit('run:start'); // TODO: Do it when intro is finished
   $loader.style.display = 'none';
 }
 
@@ -53,9 +57,19 @@ function onLoaderProgress(e) {
 }
 
 function onLoaderComplete() {
+  Mediator.on('run:start', onRunStart);
+  Mediator.on('run:end', onRunEnd);
   webgl.onLoaderComplete();
   if (USE_GUI === true) { initGUI(webgl); }
   start();
+}
+
+function onRunStart() {
+  webgl.startRun();
+}
+
+function onRunEnd() {
+  webgl.stopRun();
 }
 
 function onWindowBlur() {

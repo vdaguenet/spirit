@@ -40,19 +40,18 @@ export default class Elk extends Object3D {
     this.animator = new AnimationMixer(this.mesh);
     this.clip = this.animator.clipAction(geometry.animations[0]).setDuration(1);
     this.isReady = true;
-    this.startAnimation();
   }
 
   startAnimation(fade = false) {
     this.clip.play();
     if (fade === true) {
-      this.clip.fadeIn(5);
+      this.clip.fadeIn(2);
     }
   }
 
   stopAnimation(fade = false) {
     if (fade === true) {
-      this.clip.fadeOut(5);
+      this.clip.fadeOut(2);
     } else {
       this.clip.stop();
     }

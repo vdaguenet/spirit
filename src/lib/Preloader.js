@@ -31,19 +31,21 @@ class Preloader extends Emitter {
 
   loadTextures(textures) {
     const loader = new TextureLoader();
-    this.objectsToLoad += textures.length;
+    const textureCount = textures.length;
+    let textureLoaded = 0;
+    this.objectsToLoad += textureCount;
     this.textures = {};
 
     textures.forEach((tex) => {
       loader.load(tex.src, (texture) => {
-        this.objectsLoaded++;
+        textureLoaded++;
         this.textures[tex.id] = texture;
+        this.onProgress();
 
-        if (this.objectsLoaded >= this.objectsToLoad) {
+        if (textureLoaded >= textures.length) {
           this.onTexturesLoaded();
         }
 
-        this.onProgress();
       });
     });
   }
@@ -72,7 +74,7 @@ class Preloader extends Emitter {
     }
 
     if (this.textures === undefined) {
-      this.manifestLoaded = true;
+      this.texturesLoaded = true;
     }
 
     if (this.texturesLoaded && this.manifestLoaded) {
@@ -81,6 +83,7 @@ class Preloader extends Emitter {
   }
 
   onProgress() {
+    this.objectsLoaded++;
     this.emit('progress', {
       completedCount: this.objectsLoaded,
       totalCount: this.objectsToLoad
