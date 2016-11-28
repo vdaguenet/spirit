@@ -6,6 +6,8 @@ export default class Elk extends Object3D {
     super();
     bindAll(this, 'onModelLoaded');
 
+    this.isReady = false;
+
     this.color = '#ffffff';
     this.emissive = '#b7c5cf';
     this.specular = '#547388';
@@ -23,8 +25,6 @@ export default class Elk extends Object3D {
     this.light.position.set(0, 12, 0);
     this.light.castShadow = true;
     this.add(this.light);
-
-    this.isReady = false;
 
     const loader = new JSONLoader();
     loader.load('./assets/models/elk.js', this.onModelLoaded);
@@ -45,13 +45,13 @@ export default class Elk extends Object3D {
   startAnimation(fade = false) {
     this.clip.play();
     if (fade === true) {
-      this.clip.fadeIn(2);
+      this.clip.fadeIn(1.2);
     }
   }
 
   stopAnimation(fade = false) {
     if (fade === true) {
-      this.clip.fadeOut(2);
+      this.clip.fadeOut(1.2);
     } else {
       this.clip.stop();
     }

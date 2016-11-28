@@ -4,6 +4,7 @@ const gui = new Gui();
 
 export function initGUI(webgl) {
   initGUILights(webgl);
+  initGUIFog(webgl);
   initGUIGround(webgl);
   initGUIElk(webgl);
   initGUIPostprocessing(webgl);
@@ -12,6 +13,9 @@ export function initGUI(webgl) {
 function initGUIPostprocessing(webgl) {
   const guiPost = gui.addFolder('PostProcessing');
   guiPost.add(webgl.params, 'usePostprocessing');
+  guiPost.add(webgl.zoomBlurPass.params, 'strength', { min: 0, max: 0.2, step: 0.01 });
+  guiPost.add(webgl.zoomBlurPass.params.center, 'x', { min: 0, max: 1, step: 0.01 });
+  guiPost.add(webgl.zoomBlurPass.params.center, 'y', { min: 0, max: 1, step: 0.01 });
 }
 
 function initGUILights(webgl) {
@@ -60,4 +64,12 @@ function initGUIGround(webgl) {
   guiGround.addColorPicker(webgl.ground, 'specular').on('update', (value) => {
     webgl.ground.mat.specular.set(value);
   });
+}
+
+function initGUIFog(webgl) {
+  const guiFog = gui.addFolder('Fog');
+  guiFog.addColorPicker(webgl.fog, 'color').on('update', (value) => {
+    webgl.scene.fog.color.set(value);
+  });
+  guiFog.add(webgl.scene.fog, 'density', { min: 0, max: 0.01, step: 0.0001 });
 }

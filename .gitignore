@@ -5,7 +5,7 @@
 # node
 node_modules
 
-# config
+*.psd
 
 # build
 public/build/*.js

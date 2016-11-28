@@ -17,7 +17,7 @@ const engine = loop(animate);
 bindEvents();
 
 preloader.load([
-  { id: 'heightmap', src: '../assets/textures/ground-16.png', priority: 0, origin: 'anonymous' }
+  { id: 'heightmap', src: '../assets/textures/ground-7.jpg', priority: 0, origin: 'anonymous' }
 ]);
 preloader.loadTextures([
   { id: 'sky_back', src: '../assets/skybox/skybox_back.jpg' },
@@ -25,7 +25,8 @@ preloader.loadTextures([
   { id: 'sky_front', src: '../assets/skybox/skybox_front.jpg' },
   { id: 'sky_left', src: '../assets/skybox/skybox_left.jpg' },
   { id: 'sky_right', src: '../assets/skybox/skybox_right.jpg' },
-  { id: 'sky_top', src: '../assets/skybox/skybox_top.jpg' }
+  { id: 'sky_top', src: '../assets/skybox/skybox_top.jpg' },
+  { id: 'sky', src: '../assets/sky.jpg' }
 ]);
 
 function resizeHandler() {
@@ -69,7 +70,7 @@ function onRunStart() {
 }
 
 function onRunEnd() {
-  webgl.stopRun();
+  // webgl.stopRun();
 }
 
 function onWindowBlur() {
