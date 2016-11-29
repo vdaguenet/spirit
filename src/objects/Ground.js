@@ -10,7 +10,7 @@ export default class Ground extends Object3D {
     this.color = '#9EE1C6'; // #6F9BA2 '#217E67'; //'#37BEB3';
     this.specular = '#050505';
 
-    this.geom = new PlaneBufferGeometry(this.width, this.height, 256, 256);
+    this.geom = new PlaneBufferGeometry(this.width, this.height, 256, 1024);
     this.mat = new MeshPhongMaterial({
       color: this.color,
       specular: this.specular,

@@ -3,10 +3,9 @@ import './style/index.styl';
 import loop from 'raf-loop';
 import preloader from 'lib/Preloader';
 import Mediator from 'lib/Mediator';
+import state from 'lib/state';
 import Webgl from './Webgl';
 import { initGUI } from './gui';
-
-const USE_GUI = true;
 
 const $loader = document.querySelector('.Loading');
 const $loadingValue = document.querySelector('.Loading-value');
@@ -17,16 +16,10 @@ const engine = loop(animate);
 bindEvents();
 
 preloader.load([
-  { id: 'heightmap', src: '../assets/textures/ground-7.jpg', priority: 0, origin: 'anonymous' }
+  { id: 'heightmap', src: '../assets/textures/ground-9.jpg', priority: 0, origin: 'anonymous' }
 ]);
 preloader.loadTextures([
-  { id: 'sky_back', src: '../assets/skybox/skybox_back.jpg' },
-  { id: 'sky_bottom', src: '../assets/skybox/skybox_bottom.jpg' },
-  { id: 'sky_front', src: '../assets/skybox/skybox_front.jpg' },
-  { id: 'sky_left', src: '../assets/skybox/skybox_left.jpg' },
-  { id: 'sky_right', src: '../assets/skybox/skybox_right.jpg' },
-  { id: 'sky_top', src: '../assets/skybox/skybox_top.jpg' },
-  { id: 'sky', src: '../assets/sky.jpg' }
+  { id: 'sky', src: '../assets/sky-star2.jpg' }
 ]);
 
 function resizeHandler() {
@@ -61,7 +54,7 @@ function onLoaderComplete() {
   Mediator.on('run:start', onRunStart);
   Mediator.on('run:end', onRunEnd);
   webgl.onLoaderComplete();
-  if (USE_GUI === true) { initGUI(webgl); }
+  if (state.debug === true) { initGUI(webgl); }
   start();
 }
 

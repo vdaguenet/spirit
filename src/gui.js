@@ -1,8 +1,9 @@
 import Gui from 'guigui';
 
-const gui = new Gui();
+let gui;
 
 export function initGUI(webgl) {
+  gui = new Gui();
   initGUILights(webgl);
   initGUIFog(webgl);
   initGUIGround(webgl);

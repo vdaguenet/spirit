@@ -8,7 +8,7 @@ class DisplacementManager {
 
     this.$canvas = document.createElement('canvas');
     this.$canvas.width = 256;
-    this.$canvas.height = 256;
+    this.$canvas.height = 1024;
     this.ctx = this.$canvas.getContext('2d');
     this.texture = new Texture(this.$canvas);
   }

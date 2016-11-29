@@ -9,7 +9,7 @@ export default class Forest extends Object3D {
 
     this.width = width;
     this.height = height;
-    this.treeCount = 400;
+    this.treeCount = 600;
     this.trees = [];
   }
 
@@ -19,7 +19,7 @@ export default class Forest extends Object3D {
     while (i < this.treeCount) {
       const x = -0.5 * this.width + window.Math.random() * (0.5 * this.width - -0.5 * this.width);
       // create path
-      if (x > -20 && x < 20) {
+      if (x > -30 && x < 30) {
         continue;
       }
       const z = -0.5 * this.height + window.Math.random() * (0.5 * this.height - -0.5 * this.height);
