@@ -16,6 +16,7 @@ import Ground from 'objects/Ground';
 import Sky from 'objects/Sky';
 import Forest from 'objects/Forest';
 import Sanctuary from 'objects/Sanctuary';
+import Mountain from 'objects/Mountain';
 
 export default class Webgl {
   constructor(width, height) {
@@ -64,6 +65,10 @@ export default class Webgl {
 
     this.composer = new WAGNER.Composer(this.renderer);
     this.initPostprocessing();
+
+    this.mountain = new Mountain();
+    this.mountain.position.set(-800, 0, 0);
+    this.scene.add(this.mountain);
 
     this.sanctuary = new Sanctuary();
     this.sanctuary.setPosition(0, 0, state.world.end);

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack -d --watch"
+    "start": "webpack -d --watch",
+    "prod": "webpack --progress --optimize-minimize --optimize-dedupe"
   },
   "repository": {
     "type": "git",

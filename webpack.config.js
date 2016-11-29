@@ -11,7 +11,7 @@ module.exports = {
   resolve: {
     alias: {
       objects: path.join(__dirname, 'src/objects'),
-      materials: path.join(__dirname, 'src/materials'),
+      models: path.join(__dirname, 'src/models'),
       shaders: path.join(__dirname, 'src/shaders'),
       lib: path.join(__dirname, 'src/lib')
     }

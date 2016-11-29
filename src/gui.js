@@ -7,6 +7,7 @@ export function initGUI(webgl) {
   initGUILights(webgl);
   initGUIFog(webgl);
   initGUIGround(webgl);
+  initGUIMountain(webgl);
   initGUIElk(webgl);
   initGUIPostprocessing(webgl);
 }
@@ -70,4 +71,14 @@ function initGUIFog(webgl) {
     webgl.scene.fog.color.set(value);
   });
   guiFog.add(webgl.scene.fog, 'density', { min: 0, max: 0.01, step: 0.0001 });
+}
+
+function initGUIMountain(webgl) {
+  const guiMountain = gui.addFolder('Mountain');
+  guiMountain.addColorPicker(webgl.mountain, 'colorTop').on('update', (value) => {
+    webgl.mountain.mat.uniforms.colorTop.value.set(value);
+  });
+  guiMountain.addColorPicker(webgl.mountain, 'colorBottom').on('update', (value) => {
+    webgl.mountain.mat.uniforms.colorBottom.value.set(value);
+  });
 }
