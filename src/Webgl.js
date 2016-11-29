@@ -1,20 +1,21 @@
-import state from 'lib/state';
-import Mediator from 'lib/Mediator';
 import {
   Scene, PerspectiveCamera, WebGLRenderer, Clock, HemisphereLight,
   DirectionalLight, DirectionalLightHelper, FogExp2,
   Sphere, SphereBufferGeometry, MeshBasicMaterial, Mesh } from 'three';
+import TweenMax from 'gsap';
+import state from 'lib/state';
+import Mediator from 'lib/Mediator';
+import preloader from 'lib/Preloader';
+import DisplacementManager from 'lib/DisplacementManager';
 import WAGNER from 'lib/Wagner';
 import FXAAPass from 'lib/Wagner/src/passes/fxaa/FXAAPass';
 import VignettePass from 'lib/Wagner/src/passes/vignette/VignettePass';
-import ZoomBlurPass from 'lib/Wagner/src/passes/zoom-blur/ZoomBlurPass';
 import OrbitControls from 'lib/OrbitControls';
 import Elk from 'objects/Elk';
 import Ground from 'objects/Ground';
 import Sky from 'objects/Sky';
 import Forest from 'objects/Forest';
 import Sanctuary from 'objects/Sanctuary';
-import TweenMax from 'gsap';
 
 export default class Webgl {
   constructor(width, height) {
@@ -24,15 +25,9 @@ export default class Webgl {
 
     this.params = {
       usePostprocessing: false,
-      world: {
-        width: 800,
-        height: 1600,
-        start: 0,
-        end: -550
-      },
       runSpeed: 2
     };
-    this.params.world.start = 0.5 * this.params.world.height;
+    state.world.start = 0.5 * state.world.height;
 
     this.lights = {
       hemisphere: {
@@ -55,8 +50,8 @@ export default class Webgl {
 
     this.camera = new PerspectiveCamera(50, width / height, 1, 10000);
     this.camera.position.y = 20;
-    this.camera.position.z = this.params.world.start + 50;
-    this.camera.lookAt(0, 20, this.params.world.height);
+    this.camera.position.z = state.world.start + 50;
+    this.camera.lookAt(0, 20, state.world.height);
 
     this.initLights();
 
@@ -71,11 +66,11 @@ export default class Webgl {
     this.initPostprocessing();
 
     this.sanctuary = new Sanctuary();
-    this.sanctuary.setPosition(0, 0, this.params.world.end);
+    this.sanctuary.setPosition(0, 0, state.world.end);
     this.scene.add(this.sanctuary);
 
     this.elk = new Elk();
-    this.elk.position.set(0, 0, this.params.world.start - 30);
+    this.elk.position.set(0, 0, state.world.start - 30);
     this.scene.add(this.elk);
 
     this.elkCollider = new Sphere(this.elk.position.clone(), 20);
@@ -88,22 +83,24 @@ export default class Webgl {
       this.scene.add(this.elkColliderHelper);
     }
 
-    this.forest = new Forest(this.params.world.width, this.params.world.height);
-    this.forest.position.set(0, 0, 0);
-    this.forest.populate(this.sanctuary);
-    this.scene.add(this.forest);
-
     this.clock = new Clock();
   }
 
   onLoaderComplete() {
-    this.sky = new Sky(Math.max(this.params.world.width, this.params.world.height));
+    DisplacementManager.setHeightmap(preloader.getImage('heightmap'));
+
+    this.sky = new Sky(Math.max(state.world.width, state.world.height));
     this.sky.position.copy(this.camera.position);
     this.scene.add(this.sky);
 
-    this.ground = new Ground(this.params.world.width, this.params.world.height);
+    this.ground = new Ground(state.world.width, state.world.height);
     this.ground.position.set(0, 0, 0);
     this.scene.add(this.ground);
+
+    this.forest = new Forest(state.world.width, state.world.height);
+    this.forest.position.set(0, 0, 0);
+    this.forest.populate(this.sanctuary);
+    this.scene.add(this.forest);
 
     this.isReady = true;
   }
@@ -127,11 +124,6 @@ export default class Webgl {
   initPostprocessing() {
     this.fxaaPass = new FXAAPass();
     this.vignettePass = new VignettePass();
-    this.zoomBlurPass = new ZoomBlurPass({
-      strength: 0.07,
-      centerX: 0.5,
-      centerY: 0.6
-    });
   }
 
   resize(width, height) {
@@ -186,7 +178,6 @@ export default class Webgl {
       this.composer.reset();
       this.composer.render(this.scene, this.camera);
       this.composer.pass(this.fxaaPass);
-      this.composer.pass(this.zoomBlurPass);
       this.composer.pass(this.vignettePass);
       this.composer.toScreen();
     } else {

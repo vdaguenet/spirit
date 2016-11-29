@@ -1,5 +1,7 @@
-import { Object3D, Vector3 } from 'three';
+import { Object3D, Vector3, Math } from 'three';
 import Tree from 'objects/Tree';
+import state from 'lib/state';
+import DisplacementManager from 'lib/DisplacementManager';
 
 export default class Forest extends Object3D {
   constructor(width, height) {
@@ -15,14 +17,24 @@ export default class Forest extends Object3D {
     let i = 0
 
     while (i < this.treeCount) {
-      let x = -0.5 * this.width + Math.random() * (0.5 * this.width - -0.5 * this.width);
+      const x = -0.5 * this.width + window.Math.random() * (0.5 * this.width - -0.5 * this.width);
       // create path
       if (x > -20 && x < 20) {
         continue;
       }
-      let z = -0.5 * this.height + Math.random() * (0.5 * this.height - -0.5 * this.height);
+      const z = -0.5 * this.height + window.Math.random() * (0.5 * this.height - -0.5 * this.height);
+      const nx = (x + state.world.width * 0.5) / state.world.width;
+      const ny = (-1 * (z - state.world.height * 0.5)) / state.world.height;
+      const y = DisplacementManager.getElevationAtPoint(nx, ny);
 
-      const pos = new Vector3(x, 0, z);
+      let f = 0;
+      if (nx < 0.5) {
+        f = Math.smoothstep(nx, 0, 0.5);
+      } else {
+        f = 1 - Math.smoothstep(nx, 0.5, 1);
+      }
+
+      const pos = new Vector3(x, (y - f) * 30, z);
 
       if (sanctuary.collider.containsPoint(pos)) {
         continue;

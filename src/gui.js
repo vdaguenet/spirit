@@ -13,9 +13,6 @@ export function initGUI(webgl) {
 function initGUIPostprocessing(webgl) {
   const guiPost = gui.addFolder('PostProcessing');
   guiPost.add(webgl.params, 'usePostprocessing');
-  guiPost.add(webgl.zoomBlurPass.params, 'strength', { min: 0, max: 0.2, step: 0.01 });
-  guiPost.add(webgl.zoomBlurPass.params.center, 'x', { min: 0, max: 1, step: 0.01 });
-  guiPost.add(webgl.zoomBlurPass.params.center, 'y', { min: 0, max: 1, step: 0.01 });
 }
 
 function initGUILights(webgl) {

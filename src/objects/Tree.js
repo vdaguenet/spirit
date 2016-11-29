@@ -12,7 +12,7 @@ export default class Tree extends Object3D {
     this.mesh = new Mesh(this.geom, this.mat);
     const s = 0.5 + Math.random() * (4 - 0.5);
     this.mesh.scale.set(s, s, s);
-    this.mesh.position.set(0, 13 * (s / 2), 0);
+    this.mesh.position.set(0, 10 * s, 0);
     this.mesh.rotation.y = Math.random() * Math.PI;
     this.add(this.mesh);
   }
