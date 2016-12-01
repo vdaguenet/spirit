@@ -38,7 +38,7 @@ export default class Elk extends Object3D {
     this.mesh.rotation.y = Math.PI;
     this.add(this.mesh);
     this.animator = new AnimationMixer(this.mesh);
-    this.clip = this.animator.clipAction(geometry.animations[0]).setDuration(1);
+    this.clip = this.animator.clipAction(geometry.animations[0]).setDuration(0.9);
     this.isReady = true;
   }
 

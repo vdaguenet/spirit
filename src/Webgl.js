@@ -17,6 +17,7 @@ import Sky from 'objects/Sky';
 import Forest from 'objects/Forest';
 import Sanctuary from 'objects/Sanctuary';
 import Mountain from 'objects/Mountain';
+import Snow from 'objects/Snow';
 
 export default class Webgl {
   constructor(width, height) {
@@ -50,8 +51,10 @@ export default class Webgl {
     this.scene.fog = new FogExp2(this.fog.color, this.fog.density);
 
     this.camera = new PerspectiveCamera(50, width / height, 1, 10000);
-    this.camera.position.y = 20;
+    this.camera.position.x = 55;
+    this.camera.position.y = 35;
     this.camera.position.z = state.world.start + 50;
+
     this.camera.lookAt(0, 20, state.world.height);
 
     this.initLights();
@@ -97,6 +100,10 @@ export default class Webgl {
     this.sky = new Sky(Math.max(state.world.width, state.world.height));
     this.sky.position.copy(this.camera.position);
     this.scene.add(this.sky);
+
+    this.snow = new Snow();
+    this.snow.position.z = state.world.start;
+    this.scene.add(this.snow);
 
     this.ground = new Ground(state.world.width, state.world.height);
     this.ground.position.set(0, 0, 0);
@@ -171,7 +178,7 @@ export default class Webgl {
       }
     }
     this.elk.update(delta);
-
+    this.snow.update();
 
     if (state.debug) {
       this.dirLightHelper.update();

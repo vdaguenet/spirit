@@ -37,7 +37,6 @@ export default class Mountain extends Object3D {
         colorBottom: { type: 'c', value: new Color(this.colorBottom) }
       }
     });
-    console.log(this.mat.uniforms.colorTop.value);
 
     this.mesh1 = new Mesh(this.geom, this.mat);
     this.mesh1.position.x -= this.meshWidth * 0.5;
