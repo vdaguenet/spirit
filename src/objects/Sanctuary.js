@@ -1,17 +1,18 @@
-import { Object3D, Sphere, SphereBufferGeometry, MeshBasicMaterial, Mesh, Vector3 } from 'three';
-import state from 'lib/state';
-// import Spiral from 'objects/Spiral';
+import { Object3D, Sphere, SphereBufferGeometry, MeshBasicMaterial, Mesh,
+  Vector3, IcosahedronBufferGeometry, MeshPhongMaterial, FlatShading } from 'three';
+import settings from 'lib/settings';
+import Spirit from 'objects/Spirit';
 
 export default class Sanctuary extends Object3D {
   constructor() {
     super();
 
-    this.radius = 100;
+    this.radius = 60;
 
     this.currentPosition = this.position.clone();
     this.collider = new Sphere(this.currentPosition, this.radius);
 
-    if (state.debug) {
+    if (settings.debug) {
       this.helper = new Mesh(
         new SphereBufferGeometry(this.radius, 16, 16),
         new MeshBasicMaterial({ color: 0x00FF00, wireframe: true })
@@ -19,13 +20,24 @@ export default class Sanctuary extends Object3D {
       this.add(this.helper);
     }
 
-    // this.spirals = [];
-    // this.spiralCount = 1;
-    // for (let i = 0; i < this.spiralCount; i++) {
-    //   this.spirals[i] = new Spiral();
-    //   this.spirals[i].rotation.y = i * (2 * Math.PI / this.spiralCount);
-    //   this.add(this.spirals[i]);
-    // }
+    this.spirit = new Spirit();
+    this.add(this.spirit);
+
+    this.rocks = [];
+    this.rockCount = 20;
+    this.rockGeom = new IcosahedronBufferGeometry(4, 0);
+    this.rockMat = new MeshPhongMaterial({
+      color: 0x5e7c91,
+      shading: FlatShading
+    });
+    for (let i = 0; i < this.rockCount; i++) {
+      this.rocks.push(new Mesh(this.rockGeom, this.rockMat));
+      this.rocks[i].position.x = this.radius * Math.cos(i / this.rockCount * Math.PI * 2);
+      this.rocks[i].position.z = this.radius * Math.sin(i / this.rockCount * Math.PI * 2);
+      let s = Math.random() * 0.5 + 0.5;
+      this.rocks[i].scale.set(s, s, s);
+      this.add(this.rocks[i]);
+    }
   }
 
   setPosition(x, y, z) {
@@ -34,14 +46,14 @@ export default class Sanctuary extends Object3D {
     let translation = new Vector3();
     translation.subVectors(nextPos, this.currentPosition);
     this.collider.translate(translation);
-
+    for (let i = 0; i < this.rockCount; i++) {
+      this.rocks[i].position.x += translation.x;
+      this.rocks[i].position.z += translation.z;
+    }
     this.currentPosition.set(x, y, z);
+    this.spirit.position.set(x, y, z);
 
-    // for (let i = 0; i < this.spiralCount; i++) {
-    //   this.spirals[i].position.set(x, y, z);
-    // }
-
-    if (state.debug) {
+    if (settings.debug) {
       this.helper.position.copy(this.currentPosition);
     }
   }
@@ -53,8 +65,6 @@ export default class Sanctuary extends Object3D {
       this.currentPosition.z + speed
     );
 
-    // for (let i = 0; i < this.spiralCount; i++) {
-    //   this.spirals[i].update();
-    // }
+    this.spirit.update();
   }
 }

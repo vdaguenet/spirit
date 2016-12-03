@@ -1,6 +1,6 @@
 import { Object3D, BufferAttribute, BufferGeometry, ShaderMaterial, Points, AdditiveBlending, Color } from 'three';
 import preloader from 'lib/Preloader';
-import state from 'lib/state';
+import settings from 'lib/settings';
 
 export default class Snow extends Object3D {
   constructor() {
@@ -11,9 +11,9 @@ export default class Snow extends Object3D {
       y: 1.5
     };
     this.zone = {
-      x: state.world.width * 2,
+      x: settings.world.width * 2,
       y: 600,
-      z: state.world.height * 0.5
+      z: settings.world.height * 0.5
     };
     this.particlesCount = 20000;
     this.positions = new Float32Array(this.particlesCount * 3);

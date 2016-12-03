@@ -3,7 +3,7 @@ import './style/index.styl';
 import loop from 'raf-loop';
 import preloader from 'lib/Preloader';
 import Mediator from 'lib/Mediator';
-import state from 'lib/state';
+import settings from 'lib/settings';
 import Webgl from './Webgl';
 import { initGUI } from './gui';
 
@@ -55,7 +55,7 @@ function onLoaderComplete() {
   Mediator.on('run:start', onRunStart);
   Mediator.on('run:end', onRunEnd);
   webgl.onLoaderComplete();
-  if (state.debug === true) { initGUI(webgl); }
+  if (settings.debug === true) { initGUI(webgl); }
   start();
 }
 

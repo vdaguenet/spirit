@@ -13,6 +13,7 @@ module.exports = {
       objects: path.join(__dirname, 'src/objects'),
       models: path.join(__dirname, 'src/models'),
       shaders: path.join(__dirname, 'src/shaders'),
+      scenes: path.join(__dirname, 'src/scenes'),
       lib: path.join(__dirname, 'src/lib')
     }
   },

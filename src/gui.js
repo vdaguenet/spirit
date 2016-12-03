@@ -4,17 +4,28 @@ let gui;
 
 export function initGUI(webgl) {
   gui = new Gui();
-  initGUILights(webgl);
-  initGUIFog(webgl);
-  initGUIGround(webgl);
-  initGUIMountain(webgl);
-  initGUIElk(webgl);
-  initGUIPostprocessing(webgl);
+  initGUICamera(webgl);
+  // initGUILights(webgl);
+  // initGUIFog(webgl);
+  // initGUIGround(webgl);
+  // initGUIMountain(webgl);
+  // initGUIElk(webgl);
+  // initGUIPostprocessing(webgl);
 }
 
 function initGUIPostprocessing(webgl) {
   const guiPost = gui.addFolder('PostProcessing');
   guiPost.add(webgl.params, 'usePostprocessing');
+}
+
+function initGUICamera(webgl) {
+  const guiCamera = gui.addFolder('Camera');
+  guiCamera.add(webgl.camera.position, 'x', { min: -90, max: 90 });
+  guiCamera.add(webgl.camera.position, 'y', { min: -90, max: 90 });
+  guiCamera.add(webgl.camera.position, 'z', { min: -3000, max: 3000 });
+  guiCamera.add(webgl.camera.rotation, 'x', { min: -Math.PI, max: Math.PI, step: 0.1 });
+  guiCamera.add(webgl.camera.rotation, 'y', { min: -Math.PI, max: Math.PI, step: 0.1 });
+  guiCamera.add(webgl.camera.rotation, 'z', { min: -Math.PI, max: Math.PI, step: 0.1 });
 }
 
 function initGUILights(webgl) {

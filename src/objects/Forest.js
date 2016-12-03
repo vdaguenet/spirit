@@ -1,6 +1,6 @@
 import { Object3D, Vector3, Math } from 'three';
 import Tree from 'objects/Tree';
-import state from 'lib/state';
+import settings from 'lib/settings';
 import DisplacementManager from 'lib/DisplacementManager';
 
 export default class Forest extends Object3D {
@@ -23,8 +23,8 @@ export default class Forest extends Object3D {
         continue;
       }
       const z = -0.5 * this.height + window.Math.random() * (0.5 * this.height - -0.5 * this.height);
-      const nx = (x + state.world.width * 0.5) / state.world.width;
-      const ny = (-1 * (z - state.world.height * 0.5)) / state.world.height;
+      const nx = (x + settings.world.width * 0.5) / settings.world.width;
+      const ny = (-1 * (z - settings.world.height * 0.5)) / settings.world.height;
       const y = DisplacementManager.getElevationAtPoint(nx, ny);
 
       let f = 0;

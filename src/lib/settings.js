@@ -1,5 +1,7 @@
 export default {
-  debug: true,
+  debug: false,
+  usePostprocessing: true,
+  runSpeed: 2,
   world: {
     width: 800,
     height: 3200,

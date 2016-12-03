@@ -18,7 +18,9 @@ export default class Elk extends Object3D {
       specular: this.specular,
       shininess: 0,
       morphTargets: true,
-      shading: FlatShading
+      shading: FlatShading,
+      transparent: true,
+      opacity: 1
     });
 
     this.light = new PointLight(this.color, 1, 100, 2);
@@ -37,6 +39,7 @@ export default class Elk extends Object3D {
     this.mesh.castShadow = true;
     this.mesh.rotation.y = Math.PI;
     this.add(this.mesh);
+
     this.animator = new AnimationMixer(this.mesh);
     this.clip = this.animator.clipAction(geometry.animations[0]).setDuration(0.9);
     this.isReady = true;
@@ -52,6 +55,7 @@ export default class Elk extends Object3D {
   stopAnimation(fade = false) {
     if (fade === true) {
       this.clip.fadeOut(1.2);
+      TweenMax.to(this.material, 1.2, { opacity: 0 });
     } else {
       this.clip.stop();
     }
