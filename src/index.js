@@ -9,6 +9,8 @@ import { initGUI } from './gui';
 
 const $intro = document.querySelector('.Intro');
 const $introLine = document.querySelector('.Intro-line');
+const $end = document.querySelector('.End');
+const $audio = document.querySelector('audio');
 
 let assetsLoaded = false;
 let mustPlayTransitionOut = false;
@@ -96,13 +98,15 @@ function onIntroEnd() {
 }
 
 function onRunEnd() {
-  // webgl.stopRun();
+  TweenMax.to($end, 1.6, { autoAlpha: 1, display: 'flex', delay: 3.5 });
 }
 
 function onWindowBlur() {
   engine.stop();
+  $audio.pause();
 }
 
 function onWindowFocus() {
   engine.start();
+  $audio.play();
 }

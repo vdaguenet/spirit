@@ -5,8 +5,9 @@ const autoprefixer = require('autoprefixer-stylus');
 module.exports = {
   entry: './src/index.js',
   output: {
-    path: path.join(__dirname, 'public/build'),
-    filename: 'build.js'
+    path: path.join(__dirname, 'public'),
+    publicPath: '../',
+    filename: 'build/build.js'
   },
   resolve: {
     alias: {
@@ -19,6 +20,7 @@ module.exports = {
   },
   module: {
     loaders: [
+      { test: /\.(woff|woff2|eot|ttf)$/, loader: 'file?name=assets/fonts/[name].[ext]' },
       { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
       { test: /\.(glsl|frag|vert)$/, loader: 'raw', exclude: /node_modules/ },
       { test: /\.(glsl|frag|vert)$/, loader: 'glslify', exclude: /node_modules/ },
@@ -31,6 +33,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin('main.css')
+    new ExtractTextPlugin('build/main.css')
   ]
 };
