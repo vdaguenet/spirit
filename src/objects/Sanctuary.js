@@ -7,7 +7,7 @@ export default class Sanctuary extends Object3D {
   constructor() {
     super();
 
-    this.radius = 60;
+    this.radius = 100;
 
     this.currentPosition = this.position.clone();
     this.collider = new Sphere(this.currentPosition, this.radius);
@@ -32,8 +32,8 @@ export default class Sanctuary extends Object3D {
     });
     for (let i = 0; i < this.rockCount; i++) {
       this.rocks.push(new Mesh(this.rockGeom, this.rockMat));
-      this.rocks[i].position.x = this.radius * Math.cos(i / this.rockCount * Math.PI * 2);
-      this.rocks[i].position.z = this.radius * Math.sin(i / this.rockCount * Math.PI * 2);
+      this.rocks[i].position.x = 40 * Math.cos(i / this.rockCount * Math.PI * 2);
+      this.rocks[i].position.z = 40 * Math.sin(i / this.rockCount * Math.PI * 2);
       let s = Math.random() * 0.5 + 0.5;
       this.rocks[i].scale.set(s, s, s);
       this.add(this.rocks[i]);
@@ -58,13 +58,15 @@ export default class Sanctuary extends Object3D {
     }
   }
 
-  update(speed) {
+  updateRun(speed) {
     this.setPosition(
       this.currentPosition.x,
       this.currentPosition.y,
       this.currentPosition.z + speed
     );
+  }
 
+  update() {
     this.spirit.update();
   }
 }

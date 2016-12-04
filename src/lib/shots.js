@@ -2,7 +2,8 @@ export default {
   back: {
     position: {
       x: 0,
-      y: 20
+      y: 35,
+      z: 1650
     },
     rotation: {
       x: 0,
@@ -14,14 +15,15 @@ export default {
   'three-quarter-back': {
     position: {
       x: 55,
-      y: 35
+      y: 35,
+      z: 1650
     },
     rotation: {
       x: 0,
       y: 0,
       z: 0
     },
-    duration: 2
+    duration: 9
   },
   right: {
     position: {
@@ -34,19 +36,19 @@ export default {
       y: Math.PI / 2,
       z: 0
     },
-    duration: 2
+    duration: 6
   },
-  sanctuary: {
+  head: {
     position: {
-      x: 25,
-      y: 34,
-      z: 1607
+      x: 0,
+      y: 25,
+      z: 1578
     },
     rotation: {
       x: 0,
       y: 0,
       z: 0
     },
-    duration: 2
+    duration: 4
   }
 };

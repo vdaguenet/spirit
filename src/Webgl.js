@@ -180,12 +180,13 @@ export default class Webgl {
     if (this.isRunning) {
       this.ground.update(settings.runSpeed);
       this.forest.update(settings.runSpeed);
+      this.sanctuary.updateRun(settings.runSpeed);
 
       if (!this.hasStopped && this.sanctuary.collider.intersectsSphere(this.elkCollider)) {
         this.stopRun();
       }
     }
-    this.sanctuary.update(settings.runSpeed);
+    this.sanctuary.update();
     this.elk.update(delta);
     this.snow.update();
 
