@@ -22,11 +22,11 @@ bindEvents();
 start();
 
 preloader.load([
-  { id: 'heightmap', src: '../assets/textures/ground-9.jpg', priority: 0, origin: 'anonymous' }
+  { id: 'heightmap', src: './assets/textures/ground-9.jpg', priority: 0, origin: 'anonymous' }
 ]);
 preloader.loadTextures([
-  { id: 'sky', src: '../assets/sky-star2.jpg' },
-  { id: 'snowflake', src: '../assets/textures/snowflake.png' }
+  { id: 'sky', src: './assets/sky-star2.jpg' },
+  { id: 'snowflake', src: './assets/textures/snowflake.png' }
 ]);
 
 function resizeHandler() {
