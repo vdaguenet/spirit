@@ -9,6 +9,8 @@ export default class FeuFollet extends Object3D {
     this.positions = new Float32Array(this.particlesCount * 3);
     this.velocities = new Float32Array(this.particlesCount * 3);
 
+    this.positionsSmall = new Float32Array(this.particlesCount * 3);
+
     this.speedFactor = 0;
 
     this.zone = {
@@ -22,6 +24,10 @@ export default class FeuFollet extends Object3D {
       this.positions[i * 3 + 1] = -10; // y
       this.positions[i * 3 + 2] = Math.random() * this.zone.z - 0.5 * this.zone.z; // z
 
+      this.positionsSmall[i * 3 + 0] = Math.random() * this.zone.x * 2 - 0.5 * this.zone.x * 2; // x
+      this.positionsSmall[i * 3 + 1] = 0; // y
+      this.positionsSmall[i * 3 + 2] = Math.random() * this.zone.z * 2 - 0.5 * this.zone.z * 2; // z
+
       this.velocities[i * 3] = Math.random() * 0.2 - 0.5 * 0.2; // x
       this.velocities[i * 3 + 1] = Math.random() * 0.2; // y
       this.velocities[i * 3 + 2] = Math.random() * 0.2 - 0.5 * 0.2; // z
@@ -31,13 +37,25 @@ export default class FeuFollet extends Object3D {
     this.geom.addAttribute('position', new BufferAttribute(this.positions, 3));
     this.mat = new PointsMaterial({
       color: 0x00FFFF,
-      size: 5,
+      size: 3,
       map: preloader.getTexture('snowflake'),
       transparent: true,
       blending: AdditiveBlending
     });
     this.particles = new Points(this.geom, this.mat);
     this.add(this.particles);
+
+    this.geomSmall = new BufferGeometry();
+    this.geomSmall.addAttribute('position', new BufferAttribute(this.positionsSmall, 3));
+    this.matSmall = new PointsMaterial({
+      color: 0x00FFFF,
+      size: 1,
+      map: preloader.getTexture('snowflake'),
+      transparent: true,
+      blending: AdditiveBlending
+    });
+    this.particlesSmall = new Points(this.geomSmall, this.matSmall);
+    this.add(this.particlesSmall);
   }
 
   start() {
@@ -55,8 +73,19 @@ export default class FeuFollet extends Object3D {
         this.positions[i * 3 + 1] = 0; // y
         this.positions[i * 3 + 2] = Math.random() * this.zone.z - 0.5 * this.zone.z; // z
       }
+
+      this.positionsSmall[i * 3 + 0] += this.velocities[i * 3 + 0] * 0.5;
+      this.positionsSmall[i * 3 + 1] += this.velocities[i * 3 + 1] * 0.5;
+      this.positionsSmall[i * 3 + 2] += this.velocities[i * 3 + 2] * 0.5;
+
+      if (this.positionsSmall[i * 3 + 1] > this.zone.y * 0.5) {
+        this.positionsSmall[i * 3 + 0] = Math.random() * this.zone.x * 2 - 0.5 * this.zone.x * 2; // x
+        this.positionsSmall[i * 3 + 1] = 0; // y
+        this.positionsSmall[i * 3 + 2] = Math.random() * this.zone.z * 2 - 0.5 * this.zone.z * 2; // z
+      }
     }
 
     this.particles.geometry.attributes.position.needsUpdate = true;
+    this.particlesSmall.geometry.attributes.position.needsUpdate = true;
   }
 }

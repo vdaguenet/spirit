@@ -10,7 +10,8 @@ import DisplacementManager from 'lib/DisplacementManager';
 import WAGNER from 'lib/Wagner';
 import FXAAPass from 'lib/Wagner/src/passes/fxaa/FXAAPass';
 import VignettePass from 'lib/Wagner/src/passes/vignette/VignettePass';
-import OrbitControls from 'lib/OrbitControls';
+import MultiPassBloomPass from 'lib/Wagner/src/passes/bloom/MultiPassBloomPass';
+// import OrbitControls from 'lib/OrbitControls';
 import CameraDriver from 'lib/CameraDriver';
 import Elk from 'objects/Elk';
 import Ground from 'objects/Ground';
@@ -140,6 +141,10 @@ export default class Webgl {
   initPostprocessing() {
     this.fxaaPass = new FXAAPass();
     this.vignettePass = new VignettePass();
+    this.bloomPass = new MultiPassBloomPass({
+      blurAmount: 0.4,
+      applyZoomBlur: false
+    });
   }
 
   resize(width, height) {
@@ -200,6 +205,7 @@ export default class Webgl {
       this.composer.reset();
       this.composer.render(this.scene, this.camera);
       this.composer.pass(this.fxaaPass);
+      this.composer.pass(this.bloomPass);
       this.composer.pass(this.vignettePass);
       this.composer.toScreen();
     } else {
