@@ -7,15 +7,17 @@ import settings from 'lib/settings';
 import Webgl from './Webgl';
 import { initGUI } from './gui';
 
-const $loader = document.querySelector('.Loading');
-const $loadingValue = document.querySelector('.Loading-value');
 const $intro = document.querySelector('.Intro');
 const $introLine = document.querySelector('.Intro-line');
+
+let assetsLoaded = false;
+let mustPlayTransitionOut = false;
 
 const webgl = new Webgl(window.innerWidth, window.innerHeight);
 document.body.appendChild(webgl.renderer.domElement);
 const engine = loop(animate);
 bindEvents();
+start();
 
 preloader.load([
   { id: 'heightmap', src: '../assets/textures/ground-9.jpg', priority: 0, origin: 'anonymous' }
@@ -37,9 +39,6 @@ function animate() {
 function start() {
   engine.start();
 
-  $loader.style.display = 'none';
-  $intro.style.display = 'flex';
-
   const tlIntro = new TimelineMax();
   tlIntro.to($introLine, 1.5, { filter: 'blur(0px)', alpha: 1, ease: Linear.easeNone }, 0);
   tlIntro.to($introLine, 1.5, { filter: 'blur(15px)', alpha: 0, ease: Linear.easeNone }, 3);
@@ -58,8 +57,7 @@ function start() {
   }, 13.7);
   tlIntro.to($introLine, 1.5, { filter: 'blur(0px)', alpha: 1, ease: Linear.easeNone }, 13.8);
   tlIntro.to($introLine, 1.5, { filter: 'blur(15px)', alpha: 0, ease: Linear.easeNone }, 18.8);
-  tlIntro.to($intro, 1, { autoAlpha: 0, display: 'none', ease: Linear.easeNone }, 20);
-  tlIntro.add(onIntroEnd, 20.3);
+  tlIntro.add(onIntroEnd, 20);
 }
 
 function bindEvents() {
@@ -72,24 +70,29 @@ function bindEvents() {
 
 function onLoaderProgress(e) {
   const percent = (e.completedCount / e.totalCount) * 100;
-  $loadingValue.innerHTML = percent.toFixed(0);
+  console.log(`Loading...${percent.toFixed(0)}%`);
 }
 
 function onLoaderComplete() {
-  Mediator.on('run:start', onRunStart);
+  assetsLoaded = true;
   Mediator.on('run:end', onRunEnd);
   webgl.onLoaderComplete();
   if (settings.debug === true) { initGUI(webgl); }
-  start();
+  if (mustPlayTransitionOut) {
+    onIntroEnd();
+  }
 }
 
 function onIntroEnd() {
-
-  Mediator.emit('run:start');
-}
-
-function onRunStart() {
-  webgl.startRun();
+  if (!assetsLoaded) {
+    mustPlayTransitionOut = true;
+    return;
+  }
+  let tl = new TimelineMax();
+  tl.to($intro, 1, { autoAlpha: 0, display: 'none', ease: Linear.easeNone }, 0);
+  tl.add(() => {
+    webgl.startRun();
+  }, 0.3);
 }
 
 function onRunEnd() {
